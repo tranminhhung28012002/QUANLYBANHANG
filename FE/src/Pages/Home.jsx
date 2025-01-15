@@ -13,7 +13,11 @@ function Home() {
     <div className="w-full">
       <div className="max-w-[1440px] mx-auto px-[135px] mb-[140px]">
         <NavItem />
-        <FlashSales />
+        <FlashSales
+          title="Today's"
+          name="Flash Sales"
+          button="View All Products"
+        />
         <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
         <CateGr />
         <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>

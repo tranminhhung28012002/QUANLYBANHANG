@@ -41,7 +41,7 @@ const images = [
   },
 ];
 
-function FlashSales() {
+function FlashSales({ title, name, button }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrev = () => {
@@ -62,10 +62,10 @@ function FlashSales() {
         <div>
           <div className="flex gap-[10px] items-center">
             <span className="w-[20px] h-[40px] bg-red-500 rounded-md"></span>
-            <p className="text-red-500 font-semibold">Today</p>
+            <p className="text-red-500 font-semibold">{title}</p>
           </div>
           <div>
-            <h3 className="text-4xl font-semibold mt-6">Flash Sales</h3>
+            <h3 className="text-4xl font-semibold mt-6">{name}</h3>
           </div>
         </div>
         <div className="flex gap-2">
@@ -98,11 +98,13 @@ function FlashSales() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-[60px]">
-          <button className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600">
-            View All Products
-          </button>
-        </div>
+        {button && (
+          <div className="text-center mt-[60px]">
+            <button className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600">
+              {button}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

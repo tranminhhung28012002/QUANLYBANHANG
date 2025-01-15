@@ -84,7 +84,9 @@ function Header() {
           {!(selectTab === "Sign Up" || selectTab === "Login") && (
             <div className="ml-6 flex gap-4">
               <CiHeart className="h-[30px] w-[30px] cursor-pointer" />
-              <CiShoppingCart className="h-[30px] w-[30px] cursor-pointer" />
+              <Link to={"/Shopping"}>
+                <CiShoppingCart className="h-[30px] w-[30px] cursor-pointer" />
+              </Link>
               <div
                 className="relative cursor-pointer"
                 onClick={handleClickOutside}

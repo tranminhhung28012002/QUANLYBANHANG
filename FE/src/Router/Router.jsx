@@ -7,6 +7,8 @@ import Error404 from "../Pages/404Error/Error";
 import About from "../Pages/About/about";
 import Contact from "../Pages/Contact/Contact";
 import MyAccount from "../Pages/Account/MyAccount";
+import Shopping from "../Pages/Shopping/Shopping";
+import ProductDetail from "../Pages/ProductDetail/ProductDetail";
 const Router = new createBrowserRouter([
   {
     path: "/",
@@ -61,6 +63,22 @@ const Router = new createBrowserRouter([
     element: (
       <Layout>
         <MyAccount />
+      </Layout>
+    ),
+  },
+  {
+    path: "/Shopping",
+    element: (
+      <Layout>
+        <Shopping />
+      </Layout>
+    ),
+  },
+  {
+    path: "/ProductDetail",
+    element: (
+      <Layout>
+        <ProductDetail />
       </Layout>
     ),
   },
