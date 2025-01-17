@@ -1,18 +1,29 @@
 import { useState } from "react";
 import bookstore from "../../assets/booklogin.jpg";
 import { axiosInstance } from "../../Axios";
-
+import { useDispatch } from "react-redux";
+import { login } from "../../Store/authReducer";
 function Login() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = async () => {
     try {
-      await axiosInstance.post("/api/loginUser", {
+      // Gửi yêu cầu đăng nhập
+      const res = await axiosInstance.post("/api/loginUser", {
         Email: email,
         Password: password,
       });
-    } catch (err) {
-      console.log(err);
+      dispatch(
+        login({
+          user: res.data.user,
+          token: res.data.access_token,
+        })
+      );
+      alert("Đăng nhập thành công!");
+    } catch (error) {
+      console.error("Đăng nhập thất bại:", error);
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu.");
     }
   };
 

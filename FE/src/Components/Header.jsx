@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { IoCloseCircle } from "react-icons/io5";
 import { closeModal, openModal } from "../Store/SlideModal.js";
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { logout } from "../Store/authReducer.js";
 const Item = [
   {
     id: 1,
@@ -41,7 +42,8 @@ function Header() {
   const navigate = useNavigate();
   const [selectTab, setSelectTab] = useState("Home");
   const isOpen = useSelector((state) => state.modal.isOpen);
-  const [user, setUser] = useState();
+  const { user } = useSelector((state) => state.auth);
+  console.log("user", user);
   const dispath = useDispatch();
   const modalRef = useRef(null); // Tạo ref cho modal nội dung
 
@@ -49,6 +51,9 @@ function Header() {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       dispath(closeModal());
     }
+  };
+  const handleLogout = () => {
+    dispath(logout());
   };
   return (
     <div className="w-full ">
@@ -87,41 +92,46 @@ function Header() {
               <Link to={"/Shopping"}>
                 <CiShoppingCart className="h-[30px] w-[30px] cursor-pointer" />
               </Link>
-              <div
-                className="relative cursor-pointer"
-                onClick={handleClickOutside}
-              >
-                <img src={User} onClick={() => dispath(openModal())} />
-                {isOpen && (
-                  <div
-                    ref={modalRef}
-                    className="text-white w-[225px] top-10 bg-red-500 absolute right-0  rounded-lg bg-blend-color-burn"
-                  >
-                    <div className="flex cursor-pointer p-3 mt-2 hover:bg-red-600">
-                      <CiUser className="h-[28px] w-[28px]" />
-                      <p onClick={() => navigate("/account")}>
-                        Manage My Account
-                      </p>
+              {user && (
+                <div
+                  className="relative cursor-pointer"
+                  onClick={handleClickOutside}
+                >
+                  <img src={User} onClick={() => dispath(openModal())} />
+                  {isOpen && (
+                    <div
+                      ref={modalRef}
+                      className="text-white w-[225px] top-10 bg-red-500 absolute right-0  rounded-lg bg-blend-color-burn"
+                    >
+                      <div className="flex cursor-pointer p-3 mt-2 hover:bg-red-600">
+                        <CiUser className="h-[28px] w-[28px]" />
+                        <p onClick={() => navigate("/account")}>
+                          Manage My Account
+                        </p>
+                      </div>
+                      <div className="flex cursor-pointer p-3 hover:bg-red-600">
+                        <FaShopify className="h-[28px] w-[28px]" />
+                        <p>My Order</p>
+                      </div>
+                      <div className="flex cursor-pointer p-3 hover:bg-red-600">
+                        <IoCloseCircle className="h-[28px] w-[28px]" />
+                        <p>My Cancellations</p>
+                      </div>
+                      <div className="flex cursor-pointer p-3 hover:bg-red-600">
+                        <CiStar className="h-[28px] w-[28px]" />
+                        <p>My Reviews</p>
+                      </div>
+                      <div
+                        className="flex cursor-pointer p-3 mb-2 hover:bg-red-600"
+                        onClick={handleLogout}
+                      >
+                        <CiLogout className="h-[28px] w-[28px]" />
+                        <p>Logout</p>
+                      </div>
                     </div>
-                    <div className="flex cursor-pointer p-3 hover:bg-red-600">
-                      <FaShopify className="h-[28px] w-[28px]" />
-                      <p>My Order</p>
-                    </div>
-                    <div className="flex cursor-pointer p-3 hover:bg-red-600">
-                      <IoCloseCircle className="h-[28px] w-[28px]" />
-                      <p>My Cancellations</p>
-                    </div>
-                    <div className="flex cursor-pointer p-3 hover:bg-red-600">
-                      <CiStar className="h-[28px] w-[28px]" />
-                      <p>My Reviews</p>
-                    </div>
-                    <div className="flex cursor-pointer p-3 mb-2 hover:bg-red-600">
-                      <CiLogout className="h-[28px] w-[28px]" />
-                      <p>Logout</p>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

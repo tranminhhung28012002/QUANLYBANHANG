@@ -1,5 +1,5 @@
 import { sql, connectToDatabase } from "../service/database.js";
-
+import bcrypt from "bcryptjs";
 export const getUsers = async () => {
   try {
     console.log(connectToDatabase);
@@ -23,12 +23,12 @@ export const createUser = async (
   const role = "KHACHHANG";
   try {
     const pool = await connectToDatabase();
+    const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
       INSERT INTO Users (Username, Password, FullName, Email, Phone, Address, Role)
-      VALUES ('${username}', '${password}', '${fullName}', '${email}', '${phone}', '${address}', '${role}')
+      VALUES ('${username}', '${hashedPassword}', '${fullName}', '${email}', '${phone}', '${address}', '${role}')
     `;
     await pool.request().query(query);
-    console.log(query);
     const user = { username, fullName, email, phone, address };
     return user;
   } catch (err) {
@@ -46,7 +46,8 @@ export const loginUser = async (email, password) => {
     if (result.recordset.length === 0) {
       throw new Error("Email không tồn tại");
     } else {
-      if (user.Password !== password) {
+      const isMatch = await bcrypt.compare(password, user.Password);
+      if (!isMatch) {
         throw new Error("Mật khẩu sai");
       }
     }
