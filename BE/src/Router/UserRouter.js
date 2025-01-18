@@ -3,8 +3,10 @@ import {
   showUsers,
   addUser,
   LoginUser,
+  LogoutUser,
 } from "../controllers/UserController.js";
 import { checkEmailMiddleware } from "../middlewares/userMiddlewares.js";
+import { verifyTokenMiddleware } from "../middlewares/verifyTokenMiddlewares.js";
 
 const UserRouter = Router();
 
@@ -14,4 +16,5 @@ UserRouter.get("/users", showUsers);
 UserRouter.post("/users", checkEmailMiddleware, addUser);
 //Đăng nhập
 UserRouter.post("/loginUser", LoginUser);
+UserRouter.post("/logoutUser", LogoutUser);
 export default UserRouter;

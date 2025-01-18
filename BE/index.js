@@ -3,7 +3,8 @@ import { createServer } from "http";
 import cors from "cors";
 import UserRouter from "./src/Router/UserRouter.js";
 import express from "express";
-
+import CategoriesRouter from "./src/Router/CategoriesRouter.js";
+import cookieParser from "cookie-parser";
 const app = express();
 config();
 
@@ -14,10 +15,11 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(cookieParser());
 app.use(express.json());
 const port = process.env.PORT || 3000;
 app.use("/api", UserRouter);
+app.use("/api", CategoriesRouter);
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

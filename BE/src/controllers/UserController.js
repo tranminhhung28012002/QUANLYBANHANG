@@ -8,10 +8,10 @@ export const showUsers = async (req, res) => {
   res.json(users);
 };
 
-export const accesstoken = async (user_id) => {
+export const accesstoken = async (user_id, Verify) => {
   try {
     const token = await signToken({
-      payload: { user_id },
+      payload: { user_id, Verify },
       key: process.env.JWTKEY,
       option: JSON.parse(process.env.HET || "{expiresIn:'1d'}"),
     });
@@ -50,21 +50,57 @@ export const LoginUser = async (req, res) => {
   const { Email, Password } = req.body;
   try {
     const user = await loginUser(Email, Password);
-    const access_token = await accesstoken(user.UserID);
+    const access_token = await accesstoken(user.UserID, user.Verify);
     res.cookie("access_token", access_token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
     });
+    if (user.Role === "ADMIN") {
+      return res.status(200).json({
+        message: "Đăng nhập admin thành công",
+        access_token,
+        redirect: "/admin",
+        user: {
+          Username: user.Username,
+          FullName: user.FullName,
+          Email: user.Email,
+          Img: user.Img,
+          Phone: user.Phone,
+          Address: user.Address,
+        },
+      });
+    } else {
+    }
     res.status(200).json({
       message: "Đăng nhập thành công",
       access_token,
-      user,
+      user: {
+        Username: user.Username,
+        FullName: user.FullName,
+        Email: user.Email,
+        Img: user.Img,
+        Phone: user.Phone,
+        Address: user.Address,
+      },
     });
   } catch (err) {
     res.status(401).json({
       message: err.message,
+    });
+  }
+};
+
+export const LogoutUser = async (req, res) => {
+  try {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      path: "/",
+    });
+    res.status(200).json({
+      message: "Đăng xuất thành công",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Đã xảy ra lỗi khi đăng xuất",
     });
   }
 };

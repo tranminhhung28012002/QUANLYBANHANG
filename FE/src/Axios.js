@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
   timeout: 1000,
   headers: { "Content-Type": "application/json" },
-  credentials: "include",
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(

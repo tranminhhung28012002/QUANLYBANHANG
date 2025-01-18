@@ -40,7 +40,6 @@ export const loginUser = async (email, password) => {
   try {
     const pool = await connectToDatabase();
     const query = `SELECT * FROM Users WHERE EMAIL = '${email}'`;
-    console.log("query", query);
     const result = await pool.request().query(query);
     const user = result.recordset[0];
     if (result.recordset.length === 0) {

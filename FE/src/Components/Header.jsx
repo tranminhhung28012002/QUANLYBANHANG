@@ -15,6 +15,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { closeModal, openModal } from "../Store/SlideModal.js";
 import { Link, useNavigate } from "react-router";
 import { logout } from "../Store/authReducer.js";
+import { axiosInstance } from "../Axios.js";
 const Item = [
   {
     id: 1,
@@ -52,7 +53,12 @@ function Header() {
       dispath(closeModal());
     }
   };
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post("/api/logoutUser");
+    } catch (error) {
+      console.error("Đăng xuất thất bại:", error);
+    }
     dispath(logout());
   };
   return (
@@ -103,13 +109,17 @@ function Header() {
                       ref={modalRef}
                       className="text-white w-[225px] top-10 bg-red-500 absolute right-0  rounded-lg bg-blend-color-burn"
                     >
-                      <div className="flex cursor-pointer p-3 mt-2 hover:bg-red-600">
+                      <div
+                        className="flex cursor-pointer p-3 mt-2 hover:bg-red-600"
+                        onClick={() => navigate("/account")}
+                      >
                         <CiUser className="h-[28px] w-[28px]" />
-                        <p onClick={() => navigate("/account")}>
-                          Manage My Account
-                        </p>
+                        <p>Manage My Account</p>
                       </div>
-                      <div className="flex cursor-pointer p-3 hover:bg-red-600">
+                      <div
+                        className="flex cursor-pointer p-3 hover:bg-red-600"
+                        onClick={() => navigate("/Shopping")}
+                      >
                         <FaShopify className="h-[28px] w-[28px]" />
                         <p>My Order</p>
                       </div>
