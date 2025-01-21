@@ -1,7 +1,6 @@
 import {
   CiHeart,
   CiLogout,
-  CiSearch,
   CiShoppingCart,
   CiStar,
   CiUser,
@@ -16,6 +15,7 @@ import { closeModal, openModal } from "../Store/SlideModal.js";
 import { Link, useNavigate } from "react-router";
 import { logout } from "../Store/authReducer.js";
 import { axiosInstance } from "../Axios.js";
+import Search from "./Search.jsx";
 const Item = [
   {
     id: 1,
@@ -44,10 +44,8 @@ function Header() {
   const [selectTab, setSelectTab] = useState("Home");
   const isOpen = useSelector((state) => state.modal.isOpen);
   const { user } = useSelector((state) => state.auth);
-  console.log("user", user);
   const dispath = useDispatch();
   const modalRef = useRef(null); // Tạo ref cho modal nội dung
-
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       dispath(closeModal());
@@ -61,6 +59,7 @@ function Header() {
     }
     dispath(logout());
   };
+
   return (
     <div className="w-full ">
       <div className="max-w-[1440px] mx-auto sm:flex py-[8px] justify-between px-[135px] items-center hidden pt-10 pb-4 border-gray-500 border-b ">
@@ -68,30 +67,26 @@ function Header() {
           <h1 className="text-2xl font-bold">Exclusive</h1>
         </div>
         <div className="flex gap-12 ">
-          {Item.map((item) => (
-            <Link
-              key={item.id}
-              to={item.Navigate}
-              className={`text-lg cursor-pointer hover:border-b-2 border-gray-500 h-[30px] ${
-                selectTab === item.name
-                  ? "font-bold border-b-2 border-gray-500"
-                  : ""
-              }`}
-              onClick={() => setSelectTab(item.name)}
-            >
-              {item.name}
-            </Link>
-          ))}
+          {Item.map(
+            (item) =>
+              (item.name !== "Sign Up" || !user) && (
+                <Link
+                  key={item.id}
+                  to={item.Navigate}
+                  className={`text-lg cursor-pointer hover:border-b-2 border-gray-500 h-[30px] ${
+                    selectTab === item.name
+                      ? "font-bold border-b-2 border-gray-500"
+                      : ""
+                  }`}
+                  onClick={() => setSelectTab(item.name)}
+                >
+                  {item.name}
+                </Link>
+              )
+          )}
         </div>
         <div className="flex items-center">
-          <div className="w-[243px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[12px]">
-            <input
-              type="text"
-              placeholder="What are you looking for? "
-              className="bg-neutral-200 w-[153px] outline-none"
-            />
-            <CiSearch className="h-[30px] w-[30px] outline-none ml-[34px] cursor-pointer" />
-          </div>
+          <Search />
           {!(selectTab === "Sign Up" || selectTab === "Login") && (
             <div className="ml-6 flex gap-4">
               <CiHeart className="h-[30px] w-[30px] cursor-pointer" />
