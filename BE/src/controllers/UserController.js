@@ -68,7 +68,6 @@ export const LoginUser = async (req, res) => {
           Address: user.Address,
         },
       });
-    } else {
     }
     res.status(200).json({
       message: "Đăng nhập thành công",

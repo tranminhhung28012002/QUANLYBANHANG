@@ -1,38 +1,21 @@
-import education from "../assets/categories/education.jpg";
-import family from "../assets/categories/family.jpg";
-import history from "../assets/categories/history.jpg";
-import romance from "../assets/categories/romance.jpg";
-import novel from "../assets/categories/lighnovel.jpg";
-import fantasy from "../assets/categories/fantasy.jpg";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { axiosInstance } from "../Axios";
 
-const images = [
-  {
-    img: education,
-    name: "Education",
-  },
-  {
-    img: family,
-    name: "Family",
-  },
-  {
-    img: history,
-    name: "History",
-  },
-  {
-    img: romance,
-    name: "Romance",
-  },
-  {
-    img: novel,
-    name: "Novel",
-  },
-  {
-    img: fantasy,
-    name: "Fantasy",
-  },
-];
 function CateGr() {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const show = async () => {
+      try {
+        const res = await axiosInstance.get("/api/categories");
+        console.log("res", res.data.data);
+        setCategories(res.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    show();
+  }, []);
   return (
     <div className="mt-[140px] ">
       <div className="flex justify-between items-end">
@@ -53,21 +36,26 @@ function CateGr() {
       </div>
       <div className="mt-10">
         <div className="flex justify-between">
-          {images.map((item, index) => (
-            <div
-              key={index}
-              className="relative w-[145px] h-[170px] rounded-xl cursor-pointer"
-            >
-              <img
-                src={item.img}
-                className="absolute inset-0 w-full h-full rounded-xl object-cover"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-              <p className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold">
-                {item.name}
-              </p>
-            </div>
-          ))}
+          {categories ? (
+            categories.map((item, index) => (
+              <div
+                key={index}
+                className="relative w-[145px] h-[170px] rounded-xl cursor-pointer"
+              >
+                <img
+                  src={item.Img}
+                  alt={item.CategoryName}
+                  className="absolute inset-0 w-full h-full rounded-xl object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                <p className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold">
+                  {item.CategoryName}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>Loading categories...</p>
+          )}
         </div>
         <div className="text-center mt-[60px]">
           <button className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600">

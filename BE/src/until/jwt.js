@@ -11,16 +11,3 @@ export const signToken = ({ payload, key, option }) => {
     });
   });
 };
-
-// Hàm xác minh token
-export const verifyToken = ({ token, key }) => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, key, (error, decoded) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(decoded);
-    });
-  });
-};

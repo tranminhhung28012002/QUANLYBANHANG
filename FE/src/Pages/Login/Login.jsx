@@ -3,13 +3,14 @@ import bookstore from "../../assets/booklogin.jpg";
 import { axiosInstance } from "../../Axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../Store/authReducer";
+import { useNavigate } from "react-router";
 function Login() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      // Gửi yêu cầu đăng nhập
       const res = await axiosInstance.post("/api/loginUser", {
         Email: email,
         Password: password,
@@ -20,10 +21,12 @@ function Login() {
           token: res.data.access_token,
         })
       );
-      alert("Đăng nhập thành công!");
+      if (res.data.redirect) {
+        navigate(res.data.redirect);
+      }
+      navigate("/");
     } catch (error) {
       console.error("Đăng nhập thất bại:", error);
-      alert("Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu.");
     }
   };
 

@@ -82,5 +82,8 @@ const Router = new createBrowserRouter([
       </Layout>
     ),
   },
+  {
+    path: "/admin",
+  },
 ]);
 export default Router;
