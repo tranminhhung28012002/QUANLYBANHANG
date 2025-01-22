@@ -1,10 +1,9 @@
-import PropTypes from "prop-types";
 import { CiHeart } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 
-function Card({ price, img, title, Evaluate, sales, icon }) {
+function Card({ price, img, title, sales, icon }) {
   return (
-    <div className="w-[270px] h-[332px] group hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer">
+    <div className="w-[270px] h-[350px] group hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-lg border border-gray-200">
       <div className="relative bg-gray-100 w-[270px] h-[250px] flex items-center justify-center  overflow-hidden">
         <img src={img} alt="" className="object-contain" />
         <div className="flex flex-col absolute top-[17px] right-[17px] gap-2">
@@ -20,7 +19,7 @@ function Card({ price, img, title, Evaluate, sales, icon }) {
       <div className="mt-4">
         <p className="text-[16px] font-medium">{title}</p>
         <div className="flex mt-2 gap-3">
-          <p className="text-black font-medium">{price}</p>
+          <p className="text-black font-medium">${price}</p>
           <p className="text-gray-400 font-medium line-through">{sales}</p>
         </div>
       </div>
@@ -30,17 +29,9 @@ function Card({ price, img, title, Evaluate, sales, icon }) {
         <img src={icon} alt="" />
         <img src={icon} alt="" />
         <img src={icon} alt="" />
-        <p>{Evaluate}</p>
       </div>
     </div>
   );
 }
-Card.propTypes = {
-  price: PropTypes.string,
-  img: PropTypes.string,
-  title: PropTypes.string,
-  Evaluate: PropTypes.string,
-  sales: PropTypes.string,
-  icon: PropTypes.string,
-};
+
 export default Card;

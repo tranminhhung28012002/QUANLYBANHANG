@@ -38,7 +38,7 @@ const Item = [
     Navigate: "/Signup",
   },
 ];
-console.log(Item);
+
 function Header() {
   const navigate = useNavigate();
   const [selectTab, setSelectTab] = useState("Home");

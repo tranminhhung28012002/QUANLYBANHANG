@@ -9,6 +9,7 @@ import Contact from "../Pages/Contact/Contact";
 import MyAccount from "../Pages/Account/MyAccount";
 import Shopping from "../Pages/Shopping/Shopping";
 import ProductDetail from "../Pages/ProductDetail/ProductDetail";
+import AllBook from "../Pages/AllBook/AllBook";
 const Router = new createBrowserRouter([
   {
     path: "/",
@@ -79,6 +80,14 @@ const Router = new createBrowserRouter([
     element: (
       <Layout>
         <ProductDetail />
+      </Layout>
+    ),
+  },
+  {
+    path: "/BookAll",
+    element: (
+      <Layout>
+        <AllBook />
       </Layout>
     ),
   },

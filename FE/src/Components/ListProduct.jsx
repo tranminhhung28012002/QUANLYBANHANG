@@ -5,6 +5,7 @@ import kinhte from "../assets/card/kinhte.jpg";
 import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import Card from "./Card";
 import start from "../assets/start.svg";
+import { Link, Navigate, useNavigate } from "react-router";
 const images = [
   {
     img: fantasy,
@@ -94,7 +95,7 @@ function ListProduct() {
         </div>
       </div>
       <div className="mt-10">
-        <div className="grid grid-cols-4 ">
+        <div className="grid grid-cols-4 gap-y-14 ">
           {images.map((item, index) => (
             <div
               key={index}
@@ -112,9 +113,11 @@ function ListProduct() {
           ))}
         </div>
         <div className="text-center mt-[60px]">
-          <button className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600">
-            View All Products
-          </button>
+          <Link to={"/BookAll"}>
+            <button className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600">
+              View All Products
+            </button>
+          </Link>
         </div>
       </div>
     </div>
