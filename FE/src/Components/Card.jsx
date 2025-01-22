@@ -1,7 +1,20 @@
+import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
-import { FaEye } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaEye } from "react-icons/fa";
 
 function Card({ price, img, title, sales, icon }) {
+  const [soluong, setSoluong] = useState(1);
+  const handleUp = () => {
+    setSoluong((prev) => prev + 1);
+  };
+  const handleDown = () => {
+    if (soluong > 0) {
+      setSoluong((prev) => prev - 1);
+    }
+  };
+  const handleinput = (e) => {
+    setSoluong(e.target.value);
+  };
   return (
     <div className="w-[270px] h-[350px] group hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-lg border border-gray-200">
       <div className="relative bg-gray-100 w-[270px] h-[250px] flex items-center justify-center  overflow-hidden">
@@ -10,10 +23,28 @@ function Card({ price, img, title, sales, icon }) {
           <CiHeart className="w-[30px] h-[30px] p-1 bg-white rounded-full cursor-pointer" />
           <FaEye className="w-[30px] h-[30px] p-1 bg-white rounded-full cursor-pointer" />
         </div>
-        <div className="absolute bottom-[-50px] left-0 w-full flex justify-center bg-gray-800 text-white py-2 transition-all duration-300 ease-in-out group-hover:bottom-0">
+        <div className="absolute bottom-[-50px] left-0 w-full flex justify-between items-center bg-black text-white py-2 transition-all duration-300 ease-in-out group-hover:bottom-0">
           <button className="px-4 py-2 text-sm font-semibold">
             Add to Cart
           </button>
+          <div className="flex py-3 px-[6px] mr-4 justify-around border border-gray-500 items-center rounded-md w-[70px] h-[34px] cursor-pointer">
+            <input
+              type="text"
+              className="w-[40px] outline-none bg-inherit"
+              value={soluong}
+              onChange={handleinput}
+            />
+            <div>
+              <FaAngleUp
+                className="text-sm cursor-pointer"
+                onClick={handleUp}
+              />
+              <FaAngleDown
+                className="text-sm cursor-pointer"
+                onClick={handleDown}
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="mt-4">
