@@ -18,5 +18,6 @@ UserRouter.post("/users", checkEmailMiddleware, addUser);
 //Đăng nhập
 UserRouter.post("/loginUser", LoginUser);
 UserRouter.post("/logoutUser", LogoutUser);
+//tim kiem
 UserRouter.get("/search", searchController);
 export default UserRouter;

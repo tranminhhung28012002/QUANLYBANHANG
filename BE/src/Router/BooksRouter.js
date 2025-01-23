@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { showBooks } from "../controllers/booksController.js";
+import { showBooksAll, showBooksPage } from "../controllers/booksController.js";
 
 const BooksRouter = Router();
 
 // API để lấy danh sách sach
-BooksRouter.get("/books", showBooks);
+BooksRouter.get("/books", showBooksPage);
+BooksRouter.get("/booksshow", showBooksAll);
 export default BooksRouter;

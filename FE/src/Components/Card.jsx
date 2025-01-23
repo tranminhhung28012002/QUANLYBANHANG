@@ -16,8 +16,8 @@ function Card({ price, img, title, sales, icon }) {
     setSoluong(e.target.value);
   };
   return (
-    <div className="w-[270px] h-[350px] group hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-lg border border-gray-200">
-      <div className="relative bg-gray-100 w-[270px] h-[250px] flex items-center justify-center  overflow-hidden">
+    <div className="w-[270px] h-[350px] group hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer rounded-xl border border-gray-200">
+      <div className="relative bg-gray-100 w-[269px] h-[250px] flex items-center justify-center rounded-t-xl overflow-hidden">
         <img src={img} alt="" className="object-contain" />
         <div className="flex flex-col absolute top-[17px] right-[17px] gap-2">
           <CiHeart className="w-[30px] h-[30px] p-1 bg-white rounded-full cursor-pointer" />
@@ -51,7 +51,7 @@ function Card({ price, img, title, sales, icon }) {
         <p className="text-[16px] font-medium">{title}</p>
         <div className="flex mt-2 gap-3">
           <p className="text-black font-medium">${price}</p>
-          <p className="text-gray-400 font-medium line-through">{sales}</p>
+          <p className="text-gray-400 font-medium line-through">${sales}</p>
         </div>
       </div>
       <div className="mt-2 flex gap-2">

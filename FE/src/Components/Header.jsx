@@ -95,7 +95,7 @@ function Header() {
               </Link>
               {user && (
                 <div
-                  className="relative cursor-pointer"
+                  className="relative cursor-pointer z-50"
                   onClick={handleClickOutside}
                 >
                   <img src={User} onClick={() => dispath(openModal())} />

@@ -9,7 +9,6 @@ function Search() {
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-
     if (value) {
       fetchSuggestions(value);
     } else {
@@ -20,15 +19,18 @@ function Search() {
   const fetchSuggestions = async (term) => {
     try {
       const res = await axiosInstance.get("/api/search", {
-        params: { title: term },
+        params: { query: term },
       });
-      setSearchResults(res.data);
+      const sortedBooks = res.data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setSearchResults(sortedBooks);
     } catch (err) {
       console.log(err);
     }
   };
   return (
-    <div className="w-[243px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[12px] relative">
+    <div className="w-[243px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[12px] relative z-50">
       <input
         type="text"
         placeholder="What are you looking for? "
