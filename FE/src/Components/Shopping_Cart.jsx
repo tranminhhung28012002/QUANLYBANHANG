@@ -18,7 +18,6 @@ function Shopping_Cart({
   console.log("Quantity", Quantity);
   const [soluong, setSoluong] = useState(Quantity);
   const [Subtotal, setSubtotal] = useState(price * Quantity);
-  const [remove, setRemove] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const handleUp = () => {
     const newQuantity = soluong + 1;
@@ -45,11 +44,8 @@ function Shopping_Cart({
     }
   };
   const handleRemove = async (id) => {
-    const res = await axiosInstance.delete(
-      `/api/shoppingdelete/${user.ID}/${id}`
-    );
+    await axiosInstance.delete(`/api/shoppingdelete/${user.ID}/${id}`);
     fetchShopping();
-    console.log(res.data);
   };
   return (
     <div className="relative flex text-center gap-[180px]  shadow-custom px-10 py-6 mt-10 items-center hover:bg-gray-100 cursor-pointer group">
