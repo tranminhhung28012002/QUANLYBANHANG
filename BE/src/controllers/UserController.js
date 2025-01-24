@@ -60,6 +60,7 @@ export const LoginUser = async (req, res) => {
         access_token,
         redirect: "/admin",
         user: {
+          ID: user.UserID,
           Username: user.Username,
           FullName: user.FullName,
           Email: user.Email,
@@ -73,6 +74,7 @@ export const LoginUser = async (req, res) => {
       message: "Đăng nhập thành công",
       access_token,
       user: {
+        ID: user.UserID,
         Username: user.Username,
         FullName: user.FullName,
         Email: user.Email,

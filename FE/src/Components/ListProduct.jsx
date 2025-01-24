@@ -31,6 +31,7 @@ function ListProduct({ data }) {
               className="group hover:scale-110 transition-transform duration-300 ease-in-out"
             >
               <Card
+                id={item.BookID}
                 price={item.Price}
                 title={item.Title}
                 img={item.Img}

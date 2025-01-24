@@ -3,10 +3,23 @@ import { useState } from "react";
 import { FaAngleUp } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-function Shopping_Cart({ id, product, img, price, Quantity, QuantityChange }) {
+import { axiosInstance } from "../Axios";
+import { useSelector } from "react-redux";
+
+function Shopping_Cart({
+  id,
+  product,
+  img,
+  price,
+  Quantity,
+  QuantityChange,
+  fetchShopping,
+}) {
+  console.log("Quantity", Quantity);
   const [soluong, setSoluong] = useState(Quantity);
   const [Subtotal, setSubtotal] = useState(price * Quantity);
   const [remove, setRemove] = useState(false);
+  const { user } = useSelector((state) => state.auth);
   const handleUp = () => {
     const newQuantity = soluong + 1;
     setSoluong(newQuantity);
@@ -31,12 +44,18 @@ function Shopping_Cart({ id, product, img, price, Quantity, QuantityChange }) {
       QuantityChange(id, newQuantity); // Cập nhật số lượng trong ShoppingCartList
     }
   };
-  const handleRemove = (index) => {};
+  const handleRemove = async (id) => {
+    const res = await axiosInstance.delete(
+      `/api/shoppingdelete/${user.ID}/${id}`
+    );
+    fetchShopping();
+    console.log(res.data);
+  };
   return (
     <div className="relative flex text-center gap-[180px]  shadow-custom px-10 py-6 mt-10 items-center hover:bg-gray-100 cursor-pointer group">
       <MdDeleteForever
         className="absolute text-xl text-red-500 top-3 left-7"
-        onClick={(e) => handleRemove(e)}
+        onClick={() => handleRemove(id)}
       />
       <div className="flex items-center gap-[20px] text-start">
         <img src={img} alt="" className="w-12 h-12" />

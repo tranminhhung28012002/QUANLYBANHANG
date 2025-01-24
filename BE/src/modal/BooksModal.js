@@ -38,3 +38,24 @@ export const showBooks = async () => {
     throw error;
   }
 };
+
+export const AddCartBooks = async (UserID, BookID, quantity) => {
+  try {
+    const pool = await connectToDatabase();
+    let query = `SELECT * FROM Cart WHERE UserID = '${UserID}' AND BookID = '${BookID}'`;
+    const result = await pool.request().query(query);
+    if (result.recordset.length > 0) {
+      const updatequery = `UPDATE Cart SET Quantity = Quantity + '${quantity}' WHERE UserID = '${UserID}' AND BookID = '${BookID}'`;
+      await pool.request().query(updatequery);
+    } else {
+      const insertQuery = `
+      INSERT INTO Cart (UserID, BookID, Quantity, CreatedDate)
+      VALUES ('${UserID}', '${BookID}', '${quantity}', GETDATE())
+    `;
+      await pool.request().query(insertQuery);
+    }
+    return { success: true, message: "Book added to cart successfully." };
+  } catch (error) {
+    return { success: false, message: "Failed to add book to cart.", error };
+  }
+};

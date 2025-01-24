@@ -8,7 +8,6 @@ function CateGr() {
     const show = async () => {
       try {
         const res = await axiosInstance.get("/api/categories");
-        console.log("res", res.data.data);
         setCategories(res.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);

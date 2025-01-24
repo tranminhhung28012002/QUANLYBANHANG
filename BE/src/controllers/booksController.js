@@ -1,4 +1,9 @@
-import { countBooks, getBooks, showBooks } from "../modal/BooksModal.js";
+import {
+  AddCartBooks,
+  countBooks,
+  getBooks,
+  showBooks,
+} from "../modal/BooksModal.js";
 
 export const showBooksPage = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -38,5 +43,32 @@ export const showBooksAll = async (req, res) => {
     res.status(200).json(books);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const addBookCart = async (req, res) => {
+  const { UserID, BookID, quantity } = req.body;
+  if (!UserID || !BookID || !quantity) {
+    return res.status(400).json({
+      success: false,
+      UserID,
+      BookID,
+      quantity,
+      message: "Missing required fields.",
+    });
+  }
+
+  try {
+    const result = await AddCartBooks(UserID, BookID, quantity);
+    if (result.success) {
+      return res.status(200).json(result);
+    } else {
+      return res.status(500).json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error." });
   }
 };

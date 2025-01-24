@@ -1,49 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Roadmap from "../../Components/Roadma";
 import Shopping_Cart from "../../Components/Shopping_Cart";
-import giadinh from "../../assets/card/giadinh.jpg";
-import history from "../../assets/card/history.jpg";
-import kinhte from "../../assets/card/kinhte.jpg";
-
-const item = [
-  {
-    id: 1,
-    name: "Frieren",
-    price: 100,
-    quantity: 1,
-    img: giadinh,
-  },
-  {
-    id: 2,
-    name: "Kinh te vi mo",
-    price: 100,
-    quantity: 2,
-    img: history,
-  },
-  {
-    id: 3,
-    name: "Lich su dang",
-    price: 100,
-    quantity: 3,
-    img: kinhte,
-  },
-];
+import { axiosInstance } from "../../Axios";
+import { useSelector } from "react-redux";
 
 function Shopping() {
-  const [products, setProducts] = useState(item);
+  const { user } = useSelector((state) => state.auth);
+  const [shopping, setShopping] = useState([]);
+  const fetchShopping = async () => {
+    const res = await axiosInstance.get(`/api/shopping/${user.ID}`);
+    setShopping(res.data);
+  };
+  useEffect(() => {
+    fetchShopping();
+  }, []);
   const handleQuantityChange = (id, newQuantity) => {
-    const updatedProducts = products.map((product) => {
+    const updatedProducts = shopping.map((product) => {
       if (product.id === id) {
         return { ...product, quantity: newQuantity };
       }
       return product;
     });
-    setProducts(updatedProducts);
+    setShopping(updatedProducts);
   };
-  const totalAmount = products.reduce(
-    (total, product) => total + product.price * product.quantity,
+  const totalAmount = shopping.reduce(
+    (total, product) => total + product.Price * product.Quantity,
     0
   );
+  console.log("shopping", shopping);
   return (
     <div className="w-full">
       <Roadmap />
@@ -56,17 +40,25 @@ function Shopping() {
           <p className="text-[16px] ">Subtotal</p>
         </div>
         {/*List san pham */}
-        {products.map((e) => (
-          <Shopping_Cart
-            key={e.id}
-            id={e.id}
-            product={e.name}
-            img={e.img}
-            price={e.price}
-            Quantity={e.quantity}
-            QuantityChange={handleQuantityChange}
-          />
-        ))}
+        {shopping.length > 0 ? (
+          <div>
+            {shopping.map((e) => (
+              <Shopping_Cart
+                key={e.BookID}
+                id={e.BookID}
+                product={e.Title}
+                img={e.Img}
+                price={e.Price}
+                Quantity={e.Quantity}
+                QuantityChange={handleQuantityChange}
+                fetchShopping={fetchShopping}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-4xl">Bạn chưa có sản phẩm nào trong giỏ hàng</p>
+        )}
+
         <div className="flex justify-between mt-6">
           <button className="py-4 px-12 border border-gray-500 rounded-md cursor-pointer hover:bg-gray-100">
             Return to shop

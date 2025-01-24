@@ -6,6 +6,7 @@ import express from "express";
 import CategoriesRouter from "./src/Router/CategoriesRouter.js";
 import cookieParser from "cookie-parser";
 import BooksRouter from "./src/Router/BooksRouter.js";
+import ShoppingRouter from "./src/Router/ShoppingRouter.js";
 const app = express();
 config();
 
@@ -22,6 +23,7 @@ const port = process.env.PORT || 3000;
 app.use("/api", UserRouter);
 app.use("/api", CategoriesRouter);
 app.use("/api", BooksRouter);
+app.use("/api", ShoppingRouter);
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
