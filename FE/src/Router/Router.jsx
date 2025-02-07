@@ -77,7 +77,7 @@ const Router = new createBrowserRouter([
     ),
   },
   {
-    path: "/ProductDetail",
+    path: "/ProductDetail/:id",
     element: (
       <Layout>
         <ProductDetail />

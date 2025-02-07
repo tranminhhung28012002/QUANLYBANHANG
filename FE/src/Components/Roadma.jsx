@@ -16,8 +16,10 @@ const Roadmap = () => {
   });
 
   return (
-    <div className="pl-[135px] mt-20 max-w-[1440px] mx-auto">
-      <span className="text-[16px] font-normal text-black/50">Home / </span>
+    <div className="px-[135px] mt-14 max-w-[1440px] mx-auto">
+      <Link className="text-[16px] font-normal text-black/50" to={"/"}>
+        Home /{" "}
+      </Link>
       {breadcrumbs.length > 0 ? breadcrumbs : "Home"}
     </div>
   );

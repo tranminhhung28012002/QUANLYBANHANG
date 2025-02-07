@@ -4,7 +4,7 @@ import Header from "./Header";
 
 function Layout({ children }) {
   return (
-    <div className="">
+    <div className="relative">
       <Header />
       {children}
       <Footer />

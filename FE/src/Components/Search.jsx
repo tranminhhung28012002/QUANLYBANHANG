@@ -30,7 +30,7 @@ function Search() {
     }
   };
   return (
-    <div className="w-[243px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[12px] relative z-50">
+    <div className="w-[300px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[4px] relative z-50">
       <input
         type="text"
         placeholder="What are you looking for? "
@@ -38,25 +38,30 @@ function Search() {
         value={searchTerm}
         onChange={handleChange}
       />
-      <CiSearch className="h-[30px] w-[30px] outline-none ml-[34px] cursor-pointer" />
-      <div className="absolute bg-neutral-200 max-h-[200px] overflow-auto top-12 w-full right-0 custom">
-        {searchResults.length > 0 && (
-          <div className="flex flex-col">
-            {searchResults.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-3 p-3 cursor-pointer hover:bg-neutral-300"
-              >
-                <img src={item.Img} className="w-12 h-12" />
-                <div className="flex flex-col">
-                  <span className="text-base font-medium">{item.Title}</span>
-                  <span className="text-sm">{item.Author}</span>
+      <CiSearch className="h-[30px] w-[30px] outline-none ml-[70px] cursor-pointer" />
+
+      {searchTerm && (
+        <div className="absolute bg-neutral-200 max-h-[300px] overflow-auto top-12 w-full right-0 custom">
+          {searchResults.length > 0 ? (
+            <div className="flex flex-col">
+              {searchResults.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 p-3 cursor-pointer hover:bg-neutral-300"
+                >
+                  <img src={item.Img} className="w-12 h-12" alt={item.Title} />
+                  <div className="flex flex-col">
+                    <span className="text-base font-medium">{item.Title}</span>
+                    <span className="text-sm">{item.Author}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-2xl font-medium p-1">No search results found</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
