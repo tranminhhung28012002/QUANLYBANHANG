@@ -1,4 +1,4 @@
-import { getCategories } from "../modal/categories.js";
+import { BooksCategories, getCategories } from "../modal/CategoriesModal.js";
 
 export const categories = async (req, res) => {
   try {
@@ -9,6 +9,17 @@ export const categories = async (req, res) => {
     });
   } catch (error) {
     res.status(401).json({
+      message: error.message,
+    });
+  }
+};
+export const getBooksCategories = async (req, res) => {
+  const { CategoryID } = req.params;
+  try {
+    const data = await BooksCategories(CategoryID);
+    return res.status(200).json(data);
+  } catch (error) {
+    res.status(400).json({
       message: error.message,
     });
   }

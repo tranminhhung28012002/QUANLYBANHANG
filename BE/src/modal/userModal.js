@@ -55,6 +55,7 @@ export const loginUser = async (email, password) => {
     throw err;
   }
 };
+
 export const checkEmailExists = async (email) => {
   try {
     const pool = await connectToDatabase();

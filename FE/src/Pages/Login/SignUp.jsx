@@ -2,6 +2,7 @@ import { useState } from "react";
 import booksignup from "../../assets/booksignup.jpg";
 import { useNavigate } from "react-router";
 import { axiosInstance } from "../../Axios";
+import { toast } from "react-toastify";
 function SignUp() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
@@ -10,6 +11,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [adress, setAddress] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handleCreateAccount = async () => {
     try {
       await axiosInstance.post("http://localhost:3000/api/users", {
@@ -20,9 +22,12 @@ function SignUp() {
         phone: phone,
         address: adress,
       });
-      navigate("/login");
+      toast.success("Đăng ký thành công");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      console.error("Error creating account:", error);
+      setErrorMessage(error.response.data.message);
     }
   };
   return (
@@ -81,6 +86,9 @@ function SignUp() {
               className="outline-none border-b border-gray-500"
               onChange={(e) => setAddress(e.target.value)}
             />
+            {errorMessage && (
+              <p className="text-red-500 mt-4">{errorMessage}</p>
+            )}
           </form>
           <button
             className="bg-red-500 text-white 2xl:px-[122px]  py-4 mt-10"

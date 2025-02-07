@@ -59,3 +59,14 @@ export const AddCartBooks = async (UserID, BookID, quantity) => {
     return { success: false, message: "Failed to add book to cart.", error };
   }
 };
+
+export const DetailBooks = async (BookID) => {
+  try {
+    const pool = await connectToDatabase();
+    const query = `select b.BookID, b.Title , b.Price,b.sales , b.Quantity, c.CategoryName , b.CategoryID , b.Author ,b.created_at , b.Description , b.Img from Books b , Categories c  where c.CategoryID = b.CategoryID AND b.BookID = '${BookID}'`;
+    const result = await pool.request().query(query);
+    return result.recordset[0];
+  } catch (error) {
+    throw new Error("Không tìm thấy sách");
+  }
+};

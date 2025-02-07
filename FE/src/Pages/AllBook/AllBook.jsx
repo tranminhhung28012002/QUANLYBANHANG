@@ -39,16 +39,18 @@ function AllBook() {
           books.map((item, index) => (
             <div key={index}>
               <Card
-                price={item.Price}
+                id={item.id}
+                price={item.sales || item.Price}
                 title={item.Title}
                 img={item.Img}
                 Evaluate={item.Description}
                 icon={item.start}
+                sales={item.sales === null ? null : item.Price}
               />
             </div>
           ))
         ) : (
-          <p>Không có sách nào để hiển thị</p>
+          <p>There are no books to display</p>
         )}
       </div>
       <div className="flex justify-center items-center my-10">
@@ -57,17 +59,17 @@ function AllBook() {
           className="px-4 py-2 bg-red-500 text-white rounded-md mr-2 disabled:bg-gray-400 hover:bg-red-600"
           disabled={currentPage === 1}
         >
-          Trang trước
+          Previous page
         </button>
         <span>
-          Trang {currentPage} / {totalPages}
+          Page {currentPage} / {totalPages}
         </span>
         <button
           onClick={handleNextPage}
           className="px-4 py-2 bg-red-500 text-white rounded-md ml-2 disabled:bg-gray-400 hover:bg-red-600"
           disabled={currentPage === totalPages}
         >
-          Trang sau
+          Next page
         </button>
       </div>
     </div>

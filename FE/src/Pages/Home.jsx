@@ -1,22 +1,21 @@
-import FlashSales from "../Components/Flashsales";
 import NavItem from "../Components/NavItem";
 import unplash from "../assets/bookunplash.jpg";
 import CateGr from "../Components/CateGR";
 import Selling from "../Components/Selling";
-import ListProduct from "../Components/ListProduct";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiCustomerServiceFill } from "react-icons/ri";
 import { MdOutlineSecurity } from "react-icons/md";
 import Feadture from "../Components/Fearture";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../Axios";
+import ProductShowcase from "../Components/ProductShowcase ";
 function Home() {
   const [book, setBooks] = useState([]);
   const [flashsales, setFlashsales] = useState([]);
   const [fearture, setFeadture] = useState([]);
   useEffect(() => {
     const fetchBooks = async () => {
-      const res = await axiosInstance("/api/booksshow");
+      const res = await axiosInstance("/api/books");
       setBooks(res.data);
       const filterFlashsales = res.data.filter((item) => item.sales !== null);
       setFlashsales(filterFlashsales);
@@ -29,19 +28,30 @@ function Home() {
   }, []);
   return (
     <div className="w-full">
-      {book.length > 0 ? (
-        <div className="max-w-[1440px] mx-auto px-[135px] mb-[140px]">
+      {book && book.length > 0 ? (
+        <div className="max-w-[1440px] mx-auto px-[135px] mb-[140px] ">
           <NavItem />
-          <FlashSales data={flashsales} />
+          <ProductShowcase
+            data={flashsales}
+            title={"Flash Sales"}
+            desc={"Today"}
+            limit={4}
+          />
           <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
           <CateGr />
           <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
           <Selling />
           <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
           <img src={unplash} alt="" />
-          <ListProduct data={book} />
+          <ProductShowcase
+            data={book}
+            title={"Explore Our Products"}
+            desc={"Our Products"}
+            limit={8}
+            link={"/BookAll"}
+          />
           <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
-          <Feadture data={fearture} />
+          <Feadture data={fearture} title={""} />
           <div className="flex justify-center gap-[88px] mt-[140px]">
             <div className=" flex flex-col justify-center items-center">
               <TbTruckDelivery className="text-[55px] p-1 border-spacing-5 border-gray-500 bg-black text-white rounded-full border-8" />
