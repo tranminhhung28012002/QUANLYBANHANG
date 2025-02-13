@@ -107,10 +107,10 @@ function Header() {
                     {item.name}
                   </Link>
                   {item.name === "Sign Up" && hovered && (
-                    <div className="absolute top-[30px] left-0 bg-white shadow-md rounded-lg z-10">
+                    <div className="absolute top-[30px] -left-3 bg-white shadow-md rounded-lg z-10 w-[90px]">
                       <Link
                         to="/Signup"
-                        className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                        className="block px-4 py-2 hover:bg-gray-100 text-gray-700 "
                       >
                         Sign Up
                       </Link>
@@ -135,7 +135,7 @@ function Header() {
                 <Link to={"/Shopping"}>
                   <CiShoppingCart className="h-[30px] w-[30px] cursor-pointer" />
                 </Link>
-                {cartQuantity > 0 && (
+                {cartQuantity > 0 && user && (
                   <span className="block absolute w-6 h-5 text-sm bg-red-500 rounded-full text-center -top-1 -right-2 text-white">
                     {cartQuantity}
                   </span>

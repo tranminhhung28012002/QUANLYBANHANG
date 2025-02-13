@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../service/database.js";
 
+//show toàn bộ danh sách ra theo trang
 export const getBooks = async (page = 1, limit = 10) => {
   try {
     const pool = await connectToDatabase();
@@ -14,7 +15,7 @@ export const getBooks = async (page = 1, limit = 10) => {
     throw err;
   }
 };
-
+//đếm tổng số lượng sách trong kho
 export const countBooks = async () => {
   const pool = await connectToDatabase();
   try {
@@ -28,6 +29,7 @@ export const countBooks = async () => {
   }
 };
 
+//show toàn bộ danh sách
 export const showBooks = async () => {
   try {
     const pool = await connectToDatabase();
@@ -39,6 +41,19 @@ export const showBooks = async () => {
   }
 };
 
+//kiểm tra số lượng sách
+export const getQuantityBooks = async (BookID) => {
+  try {
+    const pool = await connectToDatabase();
+    const stockQuery = `SELECT Quantity FROM Books WHERE BookID = '${BookID}'`;
+    const resultSockQuery = await pool.request().query(stockQuery);
+    return resultSockQuery.recordset[0];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//thêm sách vào giỏ hàng
 export const AddCartBooks = async (UserID, BookID, quantity) => {
   try {
     const pool = await connectToDatabase();
@@ -60,6 +75,17 @@ export const AddCartBooks = async (UserID, BookID, quantity) => {
   }
 };
 
+//cập nhật lại số lượng sách trong giỏ hàng
+export const increaseCartBook = async (UserID, BookID, quantity) => {
+  try {
+    const pool = await connectToDatabase();
+    let query = `UPDATE Cart SET Quantity ='${quantity}' WHERE UserID = '${UserID}' AND BookID = '${BookID}'`;
+    await pool.request().query(query);
+    return { success: true, message: "Number of books successfully updated" };
+  } catch (error) {}
+};
+
+//chi tiết sách
 export const DetailBooks = async (BookID) => {
   try {
     const pool = await connectToDatabase();

@@ -1,5 +1,7 @@
 import { sql, connectToDatabase } from "../service/database.js";
 import bcrypt from "bcryptjs";
+
+//lấy toàn bộ thông tin user
 export const getUsers = async () => {
   try {
     console.log(connectToDatabase);
@@ -12,6 +14,7 @@ export const getUsers = async () => {
   }
 };
 
+//chức năng đăng ký , tạo user
 export const createUser = async (
   username,
   password,
@@ -36,6 +39,8 @@ export const createUser = async (
     throw new Error("Đăng ký thất bại");
   }
 };
+
+//chức năng đăng nhập , kiểm tra email password khi đăng nhập
 export const loginUser = async (email, password) => {
   try {
     const pool = await connectToDatabase();

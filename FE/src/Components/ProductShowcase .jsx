@@ -3,7 +3,6 @@ import Card from "./Card";
 import { Link } from "react-router";
 
 function ProductShowcase({ data, title, desc, limit, link }) {
-  console.log("data", data);
   return (
     <div className="mt-[140px] ">
       <div className="flex justify-between items-end">

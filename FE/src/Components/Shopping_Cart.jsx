@@ -40,8 +40,8 @@ function Shopping_Cart({
   };
 
   const handleInput = (e) => {
-    const newQuantity = parseInt(e.target.value);
-    if (!isNaN(newQuantity) && newQuantity > 0) {
+    const newQuantity = e.target.value;
+    if (newQuantity > 0) {
       setSoluong(newQuantity);
       setSubtotal(newQuantity * price);
       QuantityChange(id, newQuantity); // Cập nhật số lượng trong ShoppingCartList

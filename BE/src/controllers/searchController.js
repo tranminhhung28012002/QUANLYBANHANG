@@ -1,5 +1,6 @@
 import { SearchModal } from "../modal/SearchModal.js";
 
+//tìm kiếm sách
 export const searchController = async (req, res) => {
   try {
     const { query } = req.query;

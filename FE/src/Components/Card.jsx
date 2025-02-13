@@ -48,8 +48,7 @@ function Card({ id, price, img, title, sales, icon }) {
       updateCartQuantity(user.ID);
       toast.success("Add to cart successfully!");
     } catch (error) {
-      console.error(error);
-      toast.error("Add to cart failed!");
+      toast.error(error?.response?.data.message || "error");
     }
   };
   const handleDetail = async (e) => {

@@ -3,6 +3,7 @@ import { signToken } from "../until/jwt.js";
 import { config } from "dotenv";
 config();
 
+//lấy toàn bộ thông tin user
 export const showUsers = async (req, res) => {
   const users = await getUsers();
   res.json(users);
@@ -23,6 +24,7 @@ export const accesstoken = async (user_id, Verify) => {
   }
 };
 
+//chức năng đăng ký , tạo user
 export const addUser = async (req, res) => {
   const { username, password, fullName, email, phone, address } = req.body;
   try {
@@ -46,6 +48,7 @@ export const addUser = async (req, res) => {
   }
 };
 
+//chức năng đăng nhập , kiểm tra email password khi đăng nhập
 export const LoginUser = async (req, res) => {
   const { Email, Password } = req.body;
   try {
@@ -90,6 +93,7 @@ export const LoginUser = async (req, res) => {
   }
 };
 
+//chức năng thoát đăng nhập
 export const LogoutUser = async (req, res) => {
   try {
     res.clearCookie("access_token", {

@@ -87,7 +87,7 @@ function SignUp() {
               onChange={(e) => setAddress(e.target.value)}
             />
             {errorMessage && (
-              <p className="text-red-500 mt-4">{errorMessage}</p>
+              <p className="text-red-500 w-[340px]">{errorMessage}</p>
             )}
           </form>
           <button

@@ -1,11 +1,17 @@
 import { Router } from "express";
 import {
-  createOrderController,
+  createOrderControllerPaypal,
   paymentCancelController,
   paymentSuccessController,
 } from "../controllers/paypalController.js";
+import {
+  createOrderController,
+  getOrderController,
+} from "../controllers/orderdetailController.js";
 const OrdersRouter = Router();
-OrdersRouter.post("/create-order", createOrderController);
+OrdersRouter.get("/showListOrder/:UserID", getOrderController);
+OrdersRouter.post("/create-order", createOrderControllerPaypal);
+OrdersRouter.post("/create", createOrderController);
 OrdersRouter.post("/success", paymentSuccessController);
 OrdersRouter.get("/cancel", paymentCancelController);
 export default OrdersRouter;

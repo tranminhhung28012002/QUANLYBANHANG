@@ -25,7 +25,7 @@ const getAccessToken = async () => {
 };
 
 // Tạo đơn hàng
-export const createOrder = async (totalAmount, itemsCart) => {
+export const createOrderPaypal = async (totalAmount, itemsCart) => {
   const accessToken = await getAccessToken();
   const invoiceId = "INV-" + Date.now();
   const orderData = {

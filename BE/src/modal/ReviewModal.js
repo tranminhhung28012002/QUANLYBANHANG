@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../service/database.js";
 
+//lấy thông tin người review dựa vào sách
 export const getUserReviewBook = async (BookID) => {
   try {
     const pool = await connectToDatabase();

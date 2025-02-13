@@ -3,9 +3,12 @@ import {
   countBooks,
   DetailBooks,
   getBooks,
+  getQuantityBooks,
+  increaseCartBook,
   showBooks,
 } from "../modal/BooksModal.js";
 
+//show toàn bộ danh sách ra
 export const showBooksController = async (req, res) => {
   const { page, limit } = req.query;
   try {
@@ -41,6 +44,7 @@ export const showBooksController = async (req, res) => {
   }
 };
 
+//thêm sách vào giỏ hàng
 export const addBookCart = async (req, res) => {
   const { UserID, BookID, quantity } = req.body;
   if (!UserID || !BookID || !quantity) {
@@ -52,13 +56,19 @@ export const addBookCart = async (req, res) => {
       message: "Missing required fields.",
     });
   }
-
   try {
+    const stockResult = await getQuantityBooks(BookID);
+    if (stockResult.Quantity < quantity) {
+      return res.status(400).json({
+        success: false,
+        message: `Insufficient quantity! Only ${stockResult.Quantity} items available.`,
+      });
+    }
     const result = await AddCartBooks(UserID, BookID, quantity);
     if (result.success) {
       return res.status(200).json(result);
     } else {
-      return res.status(500).json(result);
+      return res.status(400).json(result);
     }
   } catch (error) {
     return res
@@ -67,6 +77,33 @@ export const addBookCart = async (req, res) => {
   }
 };
 
+//cập nhật lại số lượng sách trong giỏ hàng
+export const increaseCartBookController = async (req, res) => {
+  const { UserID, BookID, quantity } = req.body;
+  if (!UserID || !BookID || !quantity) {
+    return res.status(400).json({
+      success: false,
+      UserID,
+      BookID,
+      quantity,
+      message: "Missing required fields.",
+    });
+  }
+  try {
+    const result = await increaseCartBook(UserID, BookID, quantity);
+    if (result.success) {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result);
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error." });
+  }
+};
+
+//chi tiết sách
 export const ProductDetailBook = async (req, res) => {
   const { BookID } = req.params;
   try {

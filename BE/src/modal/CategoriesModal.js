@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../service/database.js";
 
+// lấy danh mục sách ra
 export const getCategories = async () => {
   try {
     const pool = await connectToDatabase();
@@ -10,7 +11,7 @@ export const getCategories = async () => {
     throw new Error("Khong tim thay muc luc");
   }
 };
-
+//show sách ra dựa theo danh mục sách
 export const BooksCategories = async (CategoryID) => {
   try {
     const pool = await connectToDatabase();

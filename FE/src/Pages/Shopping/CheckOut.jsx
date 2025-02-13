@@ -8,10 +8,12 @@ import { useSelector } from "react-redux";
 function CheckOut() {
   const { user } = useSelector((state) => state.auth);
   const { cartCheckout } = useCart();
-  const totalAmount = cartCheckout[0].reduce((total, product) => {
-    const price = product.sales || product.Price;
-    return total + price * product.Quantity;
-  }, 0);
+  const totalAmount = Array.isArray(cartCheckout[0])
+    ? cartCheckout[0].reduce((total, product) => {
+        const price = product.sales || product.Price;
+        return total + price * product.Quantity;
+      }, 0)
+    : 0;
   const [modal, setModal] = useState(false);
   const [paypal, setPaypal] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState("bank");
@@ -31,24 +33,25 @@ function CheckOut() {
       setModal(true);
     }
   };
-  const cartItem = cartCheckout[0].map((item) => {
-    const itemPrice = item.sales ? item.sales : item.Price;
-    const unitAmount = itemPrice ? parseFloat(itemPrice.toString()) : 0;
-    const quantity = item.Quantity ? item.Quantity.toString() : "1";
-    return {
-      name: item.Title,
-      description: item.Title,
-      sku: item.BookID.toString(),
-      unit_amount: {
-        currency_code: "USD",
-        value: unitAmount.toFixed(2),
-      },
-      quantity: quantity,
-      category: "PHYSICAL_GOODS",
-    };
-  });
+  const cartItem = Array.isArray(cartCheckout[0])
+    ? cartCheckout[0].map((item) => {
+        const itemPrice = item.sales ? item.sales : item.Price;
+        const unitAmount = itemPrice ? parseFloat(itemPrice.toString()) : 0;
+        const quantity = item.Quantity ? item.Quantity.toString() : "1";
+        return {
+          name: item.Title,
+          description: item.Title,
+          sku: item.BookID.toString(),
+          unit_amount: {
+            currency_code: "USD",
+            value: unitAmount.toFixed(2),
+          },
+          quantity: quantity,
+          category: "PHYSICAL_GOODS",
+        };
+      })
+    : 0;
 
-  console.log("cartItem", cartItem);
   return (
     <div className="w-full">
       <Roadmap />

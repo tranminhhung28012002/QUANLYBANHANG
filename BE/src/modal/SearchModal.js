@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../service/database.js";
 
+//tìm kiếm sách
 export const SearchModal = async (query) => {
   try {
     const pool = await connectToDatabase();

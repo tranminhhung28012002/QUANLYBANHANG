@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 function Shopping() {
   const { user } = useSelector((state) => state.auth);
   const [shopping, setShopping] = useState([]);
-  const { cartCheckout, setCartCheckout } = useCart();
+  const { cartCheckout, setCartCheckout, updateCartQuantity } = useCart();
   const navigate = useNavigate();
   const fetchShopping = async () => {
     const res = await axiosInstance.get(`/api/shopping/${user.ID}`);
@@ -20,13 +20,19 @@ function Shopping() {
     fetchShopping();
   }, []);
 
-  const handleQuantityChange = (id, newQuantity) => {
+  const handleQuantityChange = async (id, newQuantity) => {
     const updatedProducts = shopping.map((product) => {
-      if (product.id === id) {
-        return { ...product, quantity: newQuantity };
+      if (product.BookID === id) {
+        return { ...product, Quantity: newQuantity };
       }
       return product;
     });
+    await axiosInstance.patch("/api/cart/update", {
+      UserID: user.ID,
+      BookID: id,
+      quantity: newQuantity,
+    });
+    updateCartQuantity(user.ID);
     setShopping(updatedProducts);
   };
 

@@ -4,6 +4,7 @@ import {
   removeShopping,
 } from "../modal/ShoppingModal.js";
 
+//lấy danh sách hàng ở trong giỏ hàng dựa vào UserID
 export const getShoppingCart = async (req, res) => {
   const { UserID } = req.params;
   try {
@@ -14,6 +15,7 @@ export const getShoppingCart = async (req, res) => {
   }
 };
 
+//xóa hàng trong giỏ hàng
 export const deleteShopping = async (req, res) => {
   const { UserID, BookID } = req.params;
   try {
@@ -23,6 +25,7 @@ export const deleteShopping = async (req, res) => {
     res.status(400).json(error);
   }
 };
+//đếm tổng số lượng hàng trong giỏ hàng
 export const countShoppingController = async (req, res) => {
   const { UserID } = req.params;
   try {

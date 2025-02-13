@@ -3,19 +3,21 @@ import {
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
-
+import { axiosInstance } from "../Axios";
+import { useNavigate } from "react-router";
 // This value is from the props in the UI
 const style = { shape: "rect", layout: "vertical" };
 
-export default function Paypal({ listCart, total }) {
-  const createOrder = async (data) => {
+export default function Paypal({ userID, listCart, total }) {
+  const navigate = useNavigate();
+  const createOrder = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          itemsCart: data.cart,
-          totalAmount: data.total,
+          itemsCart: listCart,
+          totalAmount: total,
         }),
       });
       const orderData = await res.json();
@@ -33,10 +35,22 @@ export default function Paypal({ listCart, total }) {
         OrderID: data.orderID,
       }),
     });
+
     const details = await res.json();
+    if (details) {
+      await axiosInstance.post("/api/create", {
+        OrderID: data.orderID,
+        UserID: userID,
+        TotalPrice: total,
+        Status: details.paymentDetails.status,
+      });
+    }
+    if (details) {
+      navigate("/Success");
+    }
     alert(`Transaction completed by thanh cong`);
   };
-  const ButtonWrapper = ({ showSpinner, cartData, totalCart }) => {
+  const ButtonWrapper = ({ showSpinner }) => {
     const [{ isPending }] = usePayPalScriptReducer();
     return (
       <>
@@ -46,9 +60,7 @@ export default function Paypal({ listCart, total }) {
           disabled={false}
           forceReRender={[style]}
           fundingSource={undefined}
-          createOrder={(data, actions) =>
-            createOrder({ cart: cartData, total: totalCart }, actions)
-          }
+          createOrder={createOrder}
           onApprove={onApprove}
         />
       </>

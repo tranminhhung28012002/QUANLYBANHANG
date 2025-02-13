@@ -1,5 +1,6 @@
 import { BooksCategories, getCategories } from "../modal/CategoriesModal.js";
 
+//show toàn bộ mục lục sách
 export const categories = async (req, res) => {
   try {
     const data = await getCategories();
@@ -13,6 +14,8 @@ export const categories = async (req, res) => {
     });
   }
 };
+
+//lấy sách dựa vào danh mục
 export const getBooksCategories = async (req, res) => {
   const { CategoryID } = req.params;
   try {

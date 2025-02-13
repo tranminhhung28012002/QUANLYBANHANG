@@ -16,10 +16,13 @@ function Home() {
   useEffect(() => {
     const fetchBooks = async () => {
       const res = await axiosInstance("/api/books");
-      setBooks(res.data);
-      const filterFlashsales = res.data.filter((item) => item.sales !== null);
+      const availableBooks = res.data.filter((item) => item.Status === 1);
+      setBooks(availableBooks);
+      const filterFlashsales = availableBooks.filter(
+        (item) => item.sales !== null
+      );
       setFlashsales(filterFlashsales);
-      const sortedBooks = res.data.sort(
+      const sortedBooks = availableBooks.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setFeadture(sortedBooks);

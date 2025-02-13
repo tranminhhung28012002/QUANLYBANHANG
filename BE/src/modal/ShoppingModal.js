@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../service/database.js";
 
+//lấy danh sách hàng trong giỏ hàng
 export const getShopping = async (UserID) => {
   try {
     const pool = await connectToDatabase();
@@ -11,6 +12,7 @@ export const getShopping = async (UserID) => {
   }
 };
 
+//xóa hàng trong giỏ hàng
 export const removeShopping = async (UserID, BookID) => {
   try {
     const pool = await connectToDatabase();
@@ -21,6 +23,7 @@ export const removeShopping = async (UserID, BookID) => {
     return err;
   }
 };
+//đếm tổng số lượng hàng trong giỏ hàng
 export const countShopping = async (UserID) => {
   try {
     const pool = await connectToDatabase();
