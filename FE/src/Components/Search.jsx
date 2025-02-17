@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { axiosInstance } from "../Axios";
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from "react-router";
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -29,6 +30,13 @@ function Search() {
       console.log(err);
     }
   };
+  const handleDetail = async (e) => {
+    try {
+      navigate(`/productDetail/${e}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-[300px] flex bg-neutral-200 py-[7px] pl-[20px] pr-[4px] relative z-50">
       <input
@@ -48,6 +56,7 @@ function Search() {
                 <div
                   key={index}
                   className="flex items-center gap-3 p-3 cursor-pointer hover:bg-neutral-300"
+                  onClick={() => handleDetail(item.BookID)}
                 >
                   <img src={item.Img} className="w-12 h-12" alt={item.Title} />
                   <div className="flex flex-col">

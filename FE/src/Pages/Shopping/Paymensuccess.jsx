@@ -43,7 +43,7 @@ function PaymentSuccess() {
 
       <button
         className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-blue-600"
-        onClick={() => navigate("/home")} // Điều hướng đến trang chủ ngay khi nhấn nút
+        onClick={() => navigate("/")}
       >
         Trở về trang chủ
       </button>

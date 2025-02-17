@@ -2,11 +2,11 @@ import { createOrderPaypal, capturePayment } from "../service/paypal.js";
 
 //tạo đơn hàng paypal
 export const createOrderControllerPaypal = async (req, res) => {
-  const { totalAmount, itemsCart } = req.body;
+  const { totalAmount, cartItems } = req.body;
   try {
     const { OrderID, approvalLink } = await createOrderPaypal(
       totalAmount,
-      itemsCart
+      cartItems
     );
     if (!OrderID) {
       return res.status(400).json({ error: "No orderId returned from PayPal" });
@@ -23,7 +23,6 @@ export const createOrderControllerPaypal = async (req, res) => {
 // Controller để xử lý khi thanh toán thành công paypal
 export const paymentSuccessController = async (req, res) => {
   const { OrderID } = req.body;
-  console.log(OrderID);
   try {
     const paymentDetails = await capturePayment(OrderID);
     res.json({

@@ -12,6 +12,7 @@ import ProductDetail from "../Pages/ProductDetail/ProductDetail";
 import AllBook from "../Pages/AllBook/AllBook";
 import CheckOut from "../Pages/Shopping/CheckOut";
 import PaymentSuccess from "../Pages/Shopping/Paymensuccess";
+import OrderDetail from "../Pages/ProductDetail/OrderDetail";
 const Router = new createBrowserRouter([
   {
     path: "/",
@@ -106,6 +107,14 @@ const Router = new createBrowserRouter([
     element: (
       <Layout>
         <PaymentSuccess />
+      </Layout>
+    ),
+  },
+  {
+    path: "/OrderDetail/:id",
+    element: (
+      <Layout>
+        <OrderDetail />
       </Layout>
     ),
   },

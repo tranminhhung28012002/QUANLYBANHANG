@@ -19,8 +19,9 @@ function Shopping_Cart({
   const [soluong, setSoluong] = useState(Quantity);
   const [Subtotal, setSubtotal] = useState(price * Quantity);
   const { user } = useSelector((state) => state.auth);
-  const modalType = useSelector((state) => state.confirmModal.modalType);
-  const isOpen = useSelector((state) => state.confirmModal.isOpen);
+  const { modalType, idModal, isOpen } = useSelector(
+    (state) => state.confirmModal
+  );
   const { updateCartQuantity } = useCart();
   const dispatch = useDispatch();
   const handleUp = () => {
@@ -29,7 +30,6 @@ function Shopping_Cart({
     setSubtotal(newQuantity * price);
     QuantityChange(id, newQuantity); // Cập nhật số lượng trong ShoppingCartList
   };
-
   const handleDown = () => {
     if (soluong > 1) {
       const newQuantity = soluong - 1;
@@ -48,25 +48,29 @@ function Shopping_Cart({
     }
   };
   const handleRemove = async (id) => {
+    console.log(id);
     await axiosInstance.delete(`/api/shoppingdelete/${user.ID}/${id}`);
     fetchShopping();
     updateCartQuantity(user.ID);
   };
 
   const handleSaveItem = async (id) => {
+    console.log(id);
     await axiosInstance.post(`/api/shoppingsave/${user.ID}/${id}`);
     fetchShopping();
     updateCartQuantity(user.ID);
   };
 
   const handleConfirm = async () => {
+    console.log(idModal);
     if (modalType === "delete") {
-      await handleRemove(id);
+      await handleRemove(idModal);
     } else if (modalType === "save") {
       await handleSaveItem(id);
     }
     dispatch(closeConfirmModal());
   };
+
   return (
     <>
       <div className="relative flex text-center gap-[43px]  shadow-custom px-8 py-5 mt-10 items-center  cursor-pointer group">
@@ -77,7 +81,9 @@ function Shopping_Cart({
             <div className="flex gap-5">
               <button
                 className="flex items-center gap-2 text-gray-500 text-lg hover:text-red-500"
-                onClick={() => dispatch(openConfirmModal("delete"))}
+                onClick={() =>
+                  dispatch(openConfirmModal({ modalType: "delete", id }))
+                }
               >
                 <MdDeleteForever className="text-xl" />
                 <p>Delete</p>
@@ -114,7 +120,7 @@ function Shopping_Cart({
           </div>
           <p className="text-[18px] ">${Subtotal.toFixed(2)}</p>
         </div>
-        {isOpen && (
+        {isOpen && idModal === id && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <p className="text-lg font-medium">

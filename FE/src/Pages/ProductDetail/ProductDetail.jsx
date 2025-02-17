@@ -3,13 +3,13 @@ import Roadmap from "../../Components/Roadma";
 import { GrDeliver } from "react-icons/gr";
 import { CiHeart } from "react-icons/ci";
 import { MdKeyboardReturn } from "react-icons/md";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { axiosInstance } from "../../Axios";
-import Card from "../../Components/Card";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import iconuser from "../../assets/iconuser.svg";
 import ProductShowcase from "../../Components/ProductShowcase ";
+import { useCart } from "../../Context/CartContext";
 function ProductDetail() {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
@@ -18,7 +18,8 @@ function ProductDetail() {
   const [dataCateGories, setDataCateGories] = useState(null);
   const [dataReview, setDataReview] = useState(null);
   const [showAll, setShowAll] = useState(false);
-
+  const { updateCartQuantity } = useCart();
+  const navigate = useNavigate();
   const handleToggleShowMore = () => {
     setShowAll(!showAll);
   };
@@ -72,22 +73,29 @@ function ProductDetail() {
   };
 
   const handleInput = (e) => {
-    if (e.target.value < 1) {
-      setQuantity(1);
+    const newQuantity = parseInt(e.target.value);
+    if (!newQuantity > 0 && isNaN(newQuantity)) {
+      return;
     }
+    setQuantity(newQuantity);
   };
   const handleBuy = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     try {
       await axiosInstance.post("/api/cart/add", {
         UserID: user.ID,
         BookID: id,
         quantity: quantity,
       });
+      updateCartQuantity(user.ID);
 
       toast.success("Add to cart successfully!");
     } catch (error) {
       console.error(error);
-      toast.error("Add to cart failed!");
+      toast.error(error?.response?.data.message || "error");
     }
   };
   if (!product) return <div>Loading...</div>;

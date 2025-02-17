@@ -97,7 +97,7 @@ function Header() {
                 >
                   <Link
                     to={item.Navigate}
-                    className={`text-lg cursor-pointer hover:border-b-2 border-gray-500  ${
+                    className={`text-lg cursor-pointer hover:border-b-2 border-gray-500 py-2 ${
                       selectTab === item.name
                         ? "font-bold border-b-2 border-gray-500"
                         : ""

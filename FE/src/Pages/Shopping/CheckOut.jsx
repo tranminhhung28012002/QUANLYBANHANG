@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 function CheckOut() {
   const { user } = useSelector((state) => state.auth);
   const { cartCheckout } = useCart();
+  console.log("cartCheckout", cartCheckout);
   const totalAmount = Array.isArray(cartCheckout[0])
     ? cartCheckout[0].reduce((total, product) => {
         const price = product.sales || product.Price;
@@ -40,7 +41,6 @@ function CheckOut() {
         const quantity = item.Quantity ? item.Quantity.toString() : "1";
         return {
           name: item.Title,
-          description: item.Title,
           sku: item.BookID.toString(),
           unit_amount: {
             currency_code: "USD",
@@ -122,7 +122,7 @@ function CheckOut() {
               <div className="grid gap-4">
                 <div className="flex justify-between">
                   <p className="text-lg">Subtotal</p>
-                  <p className="text-lg">${totalAmount}</p>
+                  <p className="text-lg">${totalAmount.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-lg">Shipping</p>
@@ -131,7 +131,7 @@ function CheckOut() {
                 <span className="block w-full h-[1px] bg-gray-500"></span>
                 <div className="flex justify-between">
                   <p className="text-lg">Total</p>
-                  <p>${totalAmount}</p>
+                  <p>${totalAmount.toFixed(2)}</p>
                 </div>
               </div>
               <div className="grid gap-8 mb-8">
@@ -181,7 +181,7 @@ function CheckOut() {
             )}
             {paypal && (
               <PayPal
-                total={totalAmount}
+                total={totalAmount.toFixed(2)}
                 userID={user.ID}
                 listCart={cartItem}
               />

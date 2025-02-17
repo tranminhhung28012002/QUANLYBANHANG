@@ -5,8 +5,12 @@ import { axiosInstance } from "../../Axios";
 import { useSelector } from "react-redux";
 import { useCart } from "../../Context/CartContext";
 import { useNavigate } from "react-router";
+import ModalError from "../../Components/ModalError";
 
 function Shopping() {
+  const [showModal, setShowModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorData, setErrorData] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const [shopping, setShopping] = useState([]);
   const { cartCheckout, setCartCheckout, updateCartQuantity } = useCart();
@@ -36,17 +40,30 @@ function Shopping() {
     setShopping(updatedProducts);
   };
 
-  const totalAmount = shopping.reduce((total, product) => {
-    const price = product.sales || product.Price;
-    return total + price * product.Quantity;
-  }, 0);
-  const checkout = (item) => {
-    if (item) {
-      setCartCheckout([...cartCheckout, item]);
+  const totalAmount = Array.isArray(shopping)
+    ? shopping.reduce((total, product) => {
+        const price = product.sales || product.Price;
+        return total + price * product.Quantity;
+      }, 0)
+    : 0;
+
+  const checkout = async (item) => {
+    console.log("item", item);
+    try {
+      await axiosInstance.post("/api/checkQuantity", {
+        cartItems: item,
+      });
+      if (item) {
+        setCartCheckout([...cartCheckout, item]);
+      }
       navigate("/checkout");
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+      setErrorData(error.response.data.insufficientStock);
+      setShowModal(true);
     }
-    return;
   };
+  console.log(showModal);
   return (
     <div className="w-full">
       <Roadmap />
@@ -76,14 +93,18 @@ function Shopping() {
             ))}
           </div>
         ) : (
-          <p className="text-4xl text-center mt-10">
-            Bạn chưa có sản phẩm nào trong giỏ hàng
+          <p className="text-4xl text-center mt-10 min-h-[356px]">
+            You have no products in your cart, please return to the home page to
+            add products to your cart
           </p>
         )}
 
         {/* Cart Actions */}
         <div className="flex justify-between mt-6">
-          <button className="py-4 px-12 border border-gray-500 rounded-md cursor-pointer hover:bg-gray-100">
+          <button
+            className="py-4 px-12 border border-gray-500 rounded-md cursor-pointer hover:bg-gray-100"
+            onClick={() => navigate("/")}
+          >
             Return to shop
           </button>
           <button className="py-4 px-12 border border-gray-500 rounded-md cursor-pointer hover:bg-gray-100">
@@ -126,6 +147,13 @@ function Shopping() {
               >
                 Procees to checkout
               </button>
+              {showModal && (
+                <ModalError
+                  message={errorMessage}
+                  data={errorData}
+                  onClose={() => setShowModal(false)}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import Roadmap from "../../Components/Roadma";
 import { useSelector } from "react-redux";
 import { axiosInstance } from "../../Axios";
+import { useNavigate } from "react-router";
 
 function MyAccount() {
   const { user } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState("My Profile"); // Quản lý tab hiện tại
   const [ListOrder, setListOrder] = useState([]);
   const [date, setDate] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchGetOrder = async () => {
       const res = await axiosInstance.get(`/api/showListOrder/${user.ID}`);
@@ -80,7 +82,7 @@ function MyAccount() {
         </div>
 
         {/* Nội dung bên phải */}
-        <div className="shadow-custom py-10 px-20 w-full">
+        <div className="shadow-custom py-10 px-20 w-full h-[630px]">
           {activeTab === "My Profile" && (
             <>
               <h2 className="text-red-500 text-[20px] font-medium">
@@ -139,6 +141,14 @@ function MyAccount() {
                   placeholder="Confirm New Password"
                   className="py-[13px] pr-[140px] pl-[16px] outline-none bg-slate-200 w-full"
                 />
+              </div>
+              <div className="flex gap-10 mt-6 justify-end">
+                <button className="py-4 px-12 hover:bg-slate-200">
+                  Cancel
+                </button>
+                <button className="bg-red-500 py-4 px-12 text-white hover:bg-red-600">
+                  Save Changes
+                </button>
               </div>
             </>
           )}
@@ -203,7 +213,12 @@ function MyAccount() {
                             {order.TotalPrice}
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-600">
-                            <button className="text-blue-500 hover:text-blue-700">
+                            <button
+                              className="text-blue-500 hover:text-blue-700"
+                              onClick={() =>
+                                navigate(`/OrderDetail/${order.OrderID}`)
+                              }
+                            >
                               View Details
                             </button>
                           </td>
@@ -216,13 +231,6 @@ function MyAccount() {
             </div>
           )}
           {/* Các trường thay đổi mật khẩu */}
-
-          <div className="flex gap-10 mt-6 justify-end">
-            <button className="py-4 px-12 hover:bg-slate-200">Cancel</button>
-            <button className="bg-red-500 py-4 px-12 text-white hover:bg-red-600">
-              Save Changes
-            </button>
-          </div>
         </div>
       </div>
     </div>

@@ -5,11 +5,13 @@ const confirmModal = createSlice({
   initialState: {
     isOpen: false,
     modalType: "",
+    idModal: null,
   },
   reducers: {
     openConfirmModal: (state, action) => {
       state.isOpen = true;
-      state.modalType = action.payload;
+      state.modalType = action.payload.modalType;
+      state.idModal = action.payload.id;
     },
     closeConfirmModal: (state) => {
       state.isOpen = false;
