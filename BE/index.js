@@ -9,6 +9,7 @@ import BooksRouter from "./src/Router/BooksRouter.js";
 import ShoppingRouter from "./src/Router/ShoppingRouter.js";
 import ReviewRouter from "./src/Router/ReviewRouter.js";
 import OrdersRouter from "./src/Router/OrdersRouter.js";
+import AdminRouter from "./src/Router/AdminRouter.js";
 
 const app = express();
 config();
@@ -30,6 +31,8 @@ app.use("/api", BooksRouter);
 app.use("/api", ShoppingRouter);
 app.use("/api", ReviewRouter);
 app.use("/api", OrdersRouter);
+app.use("/api", AdminRouter);
+
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

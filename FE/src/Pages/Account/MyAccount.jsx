@@ -3,12 +3,16 @@ import Roadmap from "../../Components/Roadma";
 import { useSelector } from "react-redux";
 import { axiosInstance } from "../../Axios";
 import { useNavigate } from "react-router";
-
+import { BarChart } from "@mui/x-charts/BarChart";
 function MyAccount() {
   const { user } = useSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState("My Profile"); // Quản lý tab hiện tại
   const [ListOrder, setListOrder] = useState([]);
   const [date, setDate] = useState(null);
+  const [filterType, setFilterType] = useState("week");
+  const [dataSellingBook, setDataSellingBook] = useState([]);
+  const [dataUserBuyBook, setdataUserBuyBook] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchGetOrder = async () => {
@@ -29,6 +33,56 @@ function MyAccount() {
     fetchGetOrder();
   }, []);
 
+  useEffect(() => {
+    const fetchSellingBooks = async () => {
+      try {
+        const resSellingBooks = await axiosInstance.get(
+          `/api/best-selling?filterType=${filterType}`
+        );
+        setDataSellingBook(resSellingBooks.data.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    const fetchUserBuyBooks = async () => {
+      try {
+        const resSellingBooks = await axiosInstance.get(
+          `/api/bestUserBuyBook?filterType=${filterType}`
+        );
+        setdataUserBuyBook(resSellingBooks.data.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchUserBuyBooks();
+    fetchSellingBooks();
+  }, [filterType]);
+
+  const formattedDataSellingBook = dataSellingBook.map((book) => {
+    const orderDate = new Date(book.saleDate);
+    return {
+      ...book,
+      saleDate: orderDate.toLocaleDateString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+    };
+  });
+
+  const formattedDataUserBuyBook = dataUserBuyBook.map((book) => {
+    const orderDate = new Date(book.purchaseDate);
+    return {
+      ...book,
+      purchaseDate: orderDate.toLocaleDateString("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+      monthOfyear: `Tháng ${orderDate.getMonth() + 1}`,
+    };
+  });
+  console.log("formattedDataUserBuyBook", formattedDataUserBuyBook);
   return (
     <div className="w-full">
       <Roadmap />
@@ -79,6 +133,33 @@ function MyAccount() {
               </p>
             </div>
           </div>
+          {user?.Role === "ADMIN" && (
+            <div className="mt-6">
+              <h4 className="text-[16px] font-medium">My Admin</h4>
+              <div className="mt-4 gap-2 flex flex-col ml-[35px] cursor-pointer">
+                <p
+                  className={`text-gray-500 focus:text-red-500 ${
+                    activeTab === "Best-selling book statistics"
+                      ? "text-red-500"
+                      : ""
+                  }`}
+                  onClick={() => setActiveTab("Best-selling book statistics")}
+                >
+                  Best-selling book statistics
+                </p>
+                <p
+                  className={`text-gray-500 focus:text-red-500 ${
+                    activeTab === "Customers buy the most books"
+                      ? "text-red-500"
+                      : ""
+                  }`}
+                  onClick={() => setActiveTab("Customers buy the most books")}
+                >
+                  Customers buy the most books
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Nội dung bên phải */}
@@ -230,7 +311,147 @@ function MyAccount() {
               </div>
             </div>
           )}
-          {/* Các trường thay đổi mật khẩu */}
+          {activeTab === "Best-selling book statistics" && (
+            <div>
+              <h2 className="text-red-500 text-[20px] font-medium mb-4">
+                Best-selling book statistics
+              </h2>
+              <div className="flex space-x-4 mb-4">
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "week"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("week")}
+                >
+                  Tuần
+                </button>
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "month"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("month")}
+                >
+                  Tháng
+                </button>
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "year"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("year")}
+                >
+                  Năm
+                </button>
+              </div>
+
+              <BarChart
+                xAxis={[
+                  {
+                    scaleType: "band",
+                    data: formattedDataSellingBook.map((book) => {
+                      if (filterType === "week") {
+                        return `${book.Title}`; // Hiển thị ngày + sách
+                      } else if (filterType === "month") {
+                        return `${book.saleDate} - ${book.Title}`;
+                      } else if (filterType === "year") {
+                        return `Tháng ${book.saleMonth} - ${book.Title}`; // Hiển thị tháng + sách
+                      }
+                      return book.Title;
+                    }),
+                    label:
+                      filterType === "year"
+                        ? "Tháng - Tên sách"
+                        : "Ngày - Tên sách",
+                  },
+                ]}
+                series={[
+                  {
+                    data: formattedDataSellingBook.map(
+                      (book) => book.totalQuantityBook
+                    ),
+                    label: "Số lượng bán",
+                  },
+                ]}
+                width={700}
+                height={450}
+              />
+            </div>
+          )}
+          {activeTab === "Customers buy the most books" && (
+            <div>
+              <h2 className="text-red-500 text-[20px] font-medium mb-4">
+                Customers buy the most books
+              </h2>
+              <div className="flex space-x-4 mb-4">
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "week"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("week")}
+                >
+                  Tuần
+                </button>
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "month"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("month")}
+                >
+                  Tháng
+                </button>
+                <button
+                  className={`px-4 py-2 rounded ${
+                    filterType === "year"
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setFilterType("year")}
+                >
+                  Năm
+                </button>
+              </div>
+              <BarChart
+                xAxis={[
+                  {
+                    scaleType: "band",
+                    data: formattedDataUserBuyBook.map((book) => {
+                      if (filterType === "week") {
+                        return `${book.purchaseDate} -  ${book.Username}`;
+                      } else if (filterType === "month") {
+                        return `${book.purchaseDate} - ${book.Username}`;
+                      } else if (filterType === "year") {
+                        return `${book.monthOfyear} - ${book.Username}`;
+                      }
+                      return book.Username;
+                    }),
+                    label:
+                      filterType === "year"
+                        ? "Tháng - Tên sách"
+                        : "Ngày - Tên sách",
+                  },
+                ]}
+                series={[
+                  {
+                    data: formattedDataUserBuyBook.map(
+                      (book) => book.totalBooksPurchased
+                    ),
+                    label: "Số lượng bán",
+                  },
+                ]}
+                width={700}
+                height={450}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

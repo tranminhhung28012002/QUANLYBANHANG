@@ -1,8 +1,26 @@
-import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import Card from "./Card";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import ModalAdmin from "./ModalAdmin";
+import { axiosInstance } from "../Axios";
 
-function ProductShowcase({ data, title, desc, limit, link }) {
+function ProductShowcase({ data, title, desc, limit, link, reload }) {
+  const { user } = useSelector((state) => state.auth);
+  const [modal, setModal] = useState(false);
+  const [cate, setCate] = useState([]);
+  useEffect(() => {
+    try {
+      const fetchCate = async () => {
+        const res = await axiosInstance.get("/api/categories");
+        setCate(res.data.data);
+      };
+      fetchCate();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <div className="mt-[140px] ">
       <div className="flex justify-between items-end">
@@ -16,9 +34,16 @@ function ProductShowcase({ data, title, desc, limit, link }) {
           </div>
         </div>
         <div className="flex gap-2">
-          <IoArrowBack className="text-[50px]  bg-gray-300 text-black px-4 py-2 rounded-full hover:bg-gray-700" />
-
-          <IoArrowForward className="text-[50px] bg-gray-300 text-black px-4 py-2 rounded-full hover:bg-gray-700" />
+          {user?.Role === "ADMIN" ? (
+            <button
+              className="py-4 px-12 bg-red-500 text-white font-medium hover:bg-red-600"
+              onClick={() => setModal(true)}
+            >
+              Thêm
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
       <div className="mt-10">
@@ -31,8 +56,13 @@ function ProductShowcase({ data, title, desc, limit, link }) {
                 title={item.Title}
                 img={item.Img}
                 sales={item.sales === null ? null : item.Price}
+                desc={item.Description}
+                quantity={item.Quantity}
+                author={item.Author}
                 Evaluate={item.comment}
-                icon={item.start}
+                cateID={item.CategoryID}
+                cateName={cate}
+                reload={reload}
               />
             </div>
           ))}
@@ -45,6 +75,7 @@ function ProductShowcase({ data, title, desc, limit, link }) {
           </Link>
         </div>
       </div>
+      {modal && <ModalAdmin onClose={setModal} cate={cate} />}
     </div>
   );
 }

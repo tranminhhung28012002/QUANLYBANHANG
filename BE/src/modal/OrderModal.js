@@ -18,8 +18,8 @@ export const createOrders = async (OrderID, UserID, TotalPrice, Status) => {
 export const createOrderDetail = async (OrderID, UserID) => {
   try {
     const pool = await connectToDatabase();
-    const query = `INSERT INTO OrderDetails(OrderID,BookID,Quantity) 
-                   SELECT o.OrderID,b.BookID, c.Quantity from Orders o , Users u , Books b , Cart c 
+    const query = `INSERT INTO OrderDetails(OrderID,BookID,Quantity,UnitPrice) 
+                   SELECT o.OrderID,b.BookID, c.Quantity , COALESCE(b.sales, b.Price) from Orders o , Users u , Books b , Cart c 
                    where o.UserID = u.UserID and  c.BookID =  b.BookID and o.OrderID = '${OrderID}' and u.UserID = '${UserID}'
  `;
     await pool.request().query(query);

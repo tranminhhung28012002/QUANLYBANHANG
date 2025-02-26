@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../Store/authReducer";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 function Login() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -17,23 +18,22 @@ function Login() {
         Email: email,
         Password: password,
       });
+      localStorage.setItem("access_token", res.data.access_token);
+      const userResponse = await axiosInstance.get("/api/me");
+      console.log(userResponse.data);
       dispatch(
         login({
-          user: res.data.user,
+          user: userResponse.data,
           token: res.data.access_token,
         })
       );
       toast.success("Đăng nhập thành công!");
       setTimeout(() => {
-        if (res.data.redirect) {
-          navigate(res.data.redirect);
-        } else {
-          navigate("/");
-        }
+        navigate("/");
       }, 2000);
     } catch (error) {
       console.error("Đăng nhập thất bại:", error);
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.response?.data?.message || "Lỗi đăng nhập");
     }
   };
 

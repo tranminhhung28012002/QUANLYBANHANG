@@ -2,9 +2,8 @@ import { sql, connectToDatabase } from "../service/database.js";
 import bcrypt from "bcryptjs";
 
 //lấy toàn bộ thông tin user
-export const getUsers = async () => {
+export const getAllUsers = async () => {
   try {
-    console.log(connectToDatabase);
     const pool = await connectToDatabase();
     const result = await pool.request().query("SELECT * FROM Users");
     return result.recordset;
@@ -12,6 +11,14 @@ export const getUsers = async () => {
     console.error("Error fetching users:", err.message || err);
     throw err;
   }
+};
+
+export const getUser = async (UserID) => {
+  const pool = await connectToDatabase();
+  const result = await pool
+    .request()
+    .query(`SELECT * FROM Users where UserID = '${UserID}'`);
+  return result.recordset;
 };
 
 //chức năng đăng ký , tạo user

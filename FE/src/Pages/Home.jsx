@@ -13,20 +13,20 @@ function Home() {
   const [book, setBooks] = useState([]);
   const [flashsales, setFlashsales] = useState([]);
   const [fearture, setFeadture] = useState([]);
+  const fetchBooks = async () => {
+    const res = await axiosInstance("/api/books");
+    const availableBooks = res.data.filter((item) => item.Status === 1);
+    setBooks(availableBooks);
+    const filterFlashsales = availableBooks.filter(
+      (item) => item.sales !== null
+    );
+    setFlashsales(filterFlashsales);
+    const sortedBooks = availableBooks.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+    setFeadture(sortedBooks);
+  };
   useEffect(() => {
-    const fetchBooks = async () => {
-      const res = await axiosInstance("/api/books");
-      const availableBooks = res.data.filter((item) => item.Status === 1);
-      setBooks(availableBooks);
-      const filterFlashsales = availableBooks.filter(
-        (item) => item.sales !== null
-      );
-      setFlashsales(filterFlashsales);
-      const sortedBooks = availableBooks.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-      setFeadture(sortedBooks);
-    };
     fetchBooks();
   }, []);
   return (
@@ -52,6 +52,7 @@ function Home() {
             desc={"Our Products"}
             limit={8}
             link={"/BookAll"}
+            reload={fetchBooks}
           />
           <span className="bg-gray-500 w-full mx-auto h-[1px] mt-[60px] mb-[80px] block"></span>
           <Feadture data={fearture} title={""} />
